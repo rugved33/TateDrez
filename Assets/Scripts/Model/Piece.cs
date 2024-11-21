@@ -1,0 +1,76 @@
+using UnityEngine;
+
+namespace Game.Tatedrez.Model
+{
+    public enum PlayerColor { Black, White }
+    public abstract class Piece
+    {
+        public PlayerColor Owner { get; private set; }
+
+        protected Piece(PlayerColor owner)
+        {
+            Owner = owner;
+        }
+        public abstract bool IsValidMove(int fromX, int fromY, int toX, int toY, IBoard board);
+    }
+
+    public class Knight : Piece
+    {
+        public Knight(PlayerColor owner) : base(owner) { }
+
+        public override bool IsValidMove(int fromX, int fromY, int toX, int toY, IBoard board)
+        {
+            int dx = Mathf.Abs(toX - fromX);
+            int dy = Mathf.Abs(toY - fromY);
+            return (dx == 2 && dy == 1) || (dx == 1 && dy == 2);
+        }
+    }
+
+    public class Rook : Piece
+    {
+        public Rook(PlayerColor owner) : base(owner) { }
+
+        public override bool IsValidMove(int fromX, int fromY, int toX, int toY, IBoard board)
+        {
+            if (fromX != toX && fromY != toY) return false;
+
+            int dx = toX > fromX ? 1 : (toX < fromX ? -1 : 0);
+            int dy = toY > fromY ? 1 : (toY < fromY ? -1 : 0);
+
+            int x = fromX + dx, y = fromY + dy;
+
+            while (x != toX || y != toY)
+            {
+                if (board.GetPiece(x, y) != null) return false;
+                x += dx;
+                y += dy;
+            }
+
+            return true;
+        }
+    }
+
+    public class Bishop : Piece
+    {
+        public Bishop(PlayerColor owner) : base(owner) { }
+
+        public override bool IsValidMove(int fromX, int fromY, int toX, int toY, IBoard board)
+        {
+            if (Mathf.Abs(toX - fromX) != Mathf.Abs(toY - fromY)) return false;
+
+            int dx = toX > fromX ? 1 : -1;
+            int dy = toY > fromY ? 1 : -1;
+
+            int x = fromX + dx, y = fromY + dy;
+
+            while (x != toX || y != toY)
+            {
+                if (board.GetPiece(x, y) != null) return false;
+                x += dx;
+                y += dy;
+            }
+
+            return true;
+        }
+    }
+}
