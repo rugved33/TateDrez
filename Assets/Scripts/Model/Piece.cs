@@ -11,6 +11,7 @@ namespace Game.Tatedrez.Model
         {
             Owner = owner;
         }
+        public abstract PieceType GetPieceType();
         public abstract bool IsValidMove(int fromX, int fromY, int toX, int toY, IBoard board);
     }
 
@@ -18,6 +19,10 @@ namespace Game.Tatedrez.Model
     {
         public Knight(PlayerColor owner) : base(owner) { }
 
+        public override PieceType GetPieceType()
+        {
+            return PieceType.Knight;
+        }
         public override bool IsValidMove(int fromX, int fromY, int toX, int toY, IBoard board)
         {
             int dx = Mathf.Abs(toX - fromX);
@@ -29,6 +34,10 @@ namespace Game.Tatedrez.Model
     public class Rook : Piece
     {
         public Rook(PlayerColor owner) : base(owner) { }
+        public override PieceType GetPieceType()
+        {
+            return PieceType.Rook;
+        }
 
         public override bool IsValidMove(int fromX, int fromY, int toX, int toY, IBoard board)
         {
@@ -54,6 +63,10 @@ namespace Game.Tatedrez.Model
     {
         public Bishop(PlayerColor owner) : base(owner) { }
 
+        public override PieceType GetPieceType()
+        {
+            return PieceType.Bishop;
+        }
         public override bool IsValidMove(int fromX, int fromY, int toX, int toY, IBoard board)
         {
             if (Mathf.Abs(toX - fromX) != Mathf.Abs(toY - fromY)) return false;
