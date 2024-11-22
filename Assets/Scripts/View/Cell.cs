@@ -15,12 +15,10 @@ namespace Game.Tatedrez.View
             Y = y;
 
             // Add a visual representation for the cell 
-            cellRenderer = gameObject.AddComponent<Renderer>();
-            cellRenderer.material = new Material(Shader.Find("Standard"));
-            cellRenderer.material.color = Color.white;
+            cellRenderer = gameObject.AddComponent<SpriteRenderer>();
 
             // Adjust the transform for better visuals
-            transform.position = new Vector3(X, 0, Y); // Place cell at grid position
+            transform.position = new Vector3(X, Y, 0); // Place cell at grid position
             transform.localScale = Vector3.one * 0.9f; // Scale down slightly for gaps
         }
 
