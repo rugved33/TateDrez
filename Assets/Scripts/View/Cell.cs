@@ -9,6 +9,7 @@ namespace Game.Tatedrez.View
 
         private SpriteRenderer cellRenderer;
         private Color assignedColor;
+        private const float ScaleFactor = 0.9f;
 
         public void Initialize(int x, int y, BoardData boardData)
         {
@@ -22,7 +23,7 @@ namespace Game.Tatedrez.View
             assignedColor = cellRenderer.color;
 
             transform.position = new Vector3(X, Y, 0);
-            transform.localScale = Vector3.one; 
+            transform.localScale = Vector3.one * ScaleFactor; 
         }
 
         public void Highlight(bool highlight)
