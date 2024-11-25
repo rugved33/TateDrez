@@ -140,6 +140,10 @@ namespace Game.Tatedrez.Presenter
         public void UpdateView()
         {
             Debug.Log($"updating view current player after placement is {gameState.CurrentPlayer.Color}");
+
+            int totalMoves = gameState.TotalMoves;
+            view.UpdateHUD(totalMoves);
+
             var currentPlayer = gameState.CurrentPlayer;
             view.UpdateCurrentPlayerView(currentPlayer);
         }

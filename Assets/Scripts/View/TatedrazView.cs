@@ -17,6 +17,8 @@ namespace Game.Tatedrez.View
         [SerializeField] private Button rookButton;
         [SerializeField] private Button bishopButton;
         [SerializeField] private TextMeshProUGUI currentPlayerText;
+        [Space(15)]
+        [SerializeField] private TextMeshProUGUI totalMovesHUD;
     
         private Dictionary<PieceType, Button> pieceButtons;
         private const float PieceAnimDuration = 0.5f;
@@ -72,6 +74,10 @@ namespace Game.Tatedrez.View
                     UpdateCellVisual(x, y, piece);
                 }
             }
+        }
+        public void UpdateHUD(int totalMoves)
+        {
+            totalMovesHUD.text = $"Total Moves: {totalMoves}";
         }
 
         public void UpdateCurrentPlayerView(Player currentPlayer)
