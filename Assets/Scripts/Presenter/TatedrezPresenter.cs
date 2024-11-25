@@ -35,6 +35,11 @@ namespace Game.Tatedrez.Presenter
         {
             player1 = new Player(PlayerColor.White);
             player2 = new Player(PlayerColor.Black);
+
+            var availablePieces = pieceFactory.CreateDefaultPieces();
+            player1.InitPlayerPieces(availablePieces);
+            player2.InitPlayerPieces(availablePieces);
+
             board = new Board(BoardWidth, BoardHeight);
             gameState = new GameState(player1, player2, board);
 
@@ -73,12 +78,18 @@ namespace Game.Tatedrez.Presenter
                 return;
             }
 
+            if (gameState.CurrentPlayer.GetAvailablePieceCount(selectedPieceType) <= 0)
+            {
+                Debug.Log($"No {selectedPieceType} pieces available for {gameState.CurrentPlayer.Color}");
+                return;
+            }
             Debug.Log($"current player is {gameState.CurrentPlayer.Color}");
 
             var piece = pieceFactory.CreatePiece(selectedPieceType, gameState.CurrentPlayer.Color);
 
             if (gameState.PlacePiece(piece, x, y))
             {
+                gameState.CurrentPlayer.DeductAvailablePiece(selectedPieceType);
                 view.UpdateBoard(board); 
                 selectedPieceType = PieceType.None; 
                 Debug.Log($"{piece.GetType().Name} placed at ({x}, {y})");
@@ -154,6 +165,12 @@ namespace Game.Tatedrez.Presenter
             if (gameState.CurrentState != GameState.State.PlacementPhase)
             {
                 Debug.Log("Cannot select a piece type outside the placement phase.");
+                return;
+            }
+
+            if (gameState.CurrentPlayer.GetAvailablePieceCount(pieceType) <= 0)
+            {
+                Debug.Log($"No {pieceType} pieces available for {gameState.CurrentPlayer.Color}");
                 return;
             }
 
