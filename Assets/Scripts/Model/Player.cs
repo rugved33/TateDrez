@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using Game.Tatedrez.Factory;
 
 namespace Game.Tatedrez.Model
 {
@@ -8,7 +9,7 @@ namespace Game.Tatedrez.Model
         public PlayerColor Color { get; private set; }
         public List<Piece> Pieces { get; private set; }
         public bool IsTurn { get; set; }
-
+        private Dictionary<PieceType, int> availablePieces;
         private const int MaxLimit = 3;
 
         public Player(PlayerColor color)
@@ -16,6 +17,12 @@ namespace Game.Tatedrez.Model
             Color = color;
             Pieces = new List<Piece>();
             IsTurn = color == PlayerColor.Black;
+        }
+
+        public void InitPlayerPieces(Dictionary<PieceType, int> Pieces)
+        {
+            availablePieces = new Dictionary<PieceType, int>();
+            availablePieces = Pieces;
         }
 
         public void AddPiece(Piece piece)
@@ -54,6 +61,23 @@ namespace Game.Tatedrez.Model
                 }
             }
             return false;
+        }
+
+        // Decrements the count of an available piece type
+        public bool DeductAvailablePiece(PieceType pieceType)
+        {
+            if (availablePieces.ContainsKey(pieceType) && availablePieces[pieceType] > 0)
+            {
+                availablePieces[pieceType]--;
+                return true;
+            }
+            return false;
+        }
+
+        // Returns the count of available pieces for a specific type
+        public int GetAvailablePieceCount(PieceType pieceType)
+        {
+            return availablePieces.ContainsKey(pieceType) ? availablePieces[pieceType] : 0;
         }
 
         private (int x, int y) GetPiecePosition(Piece piece, IBoard board)

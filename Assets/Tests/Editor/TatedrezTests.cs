@@ -175,4 +175,25 @@ public class TatedrezTests
         Assert.AreEqual(rook.GetPieceType(),PieceType.Rook);
         Assert.AreEqual(rook.Owner, PlayerColor.Black);
     }
+
+    [Test]
+    public void PlayerDefaultPieceTest()
+    {   
+        //Arrange
+        IPieceFactory pieceFactory = new PieceFactory();
+        var player = new Player(PlayerColor.White);
+
+        //Act
+        var pieces = pieceFactory.CreateDefaultPieces();
+        player.InitPlayerPieces(pieces);
+
+        // Assert
+        Assert.AreEqual(player.GetAvailablePieceCount(PieceType.Rook),1);
+        Assert.AreEqual(player.GetAvailablePieceCount(PieceType.Bishop),1);
+        Assert.AreEqual(player.GetAvailablePieceCount(PieceType.Knight),1);
+
+        //Act
+        player.DeductAvailablePiece(PieceType.Knight);
+        Assert.AreEqual(player.GetAvailablePieceCount(PieceType.Knight),0);
+    }
 }
