@@ -1,5 +1,6 @@
 using System;
 using Game.Tatedrez.Model;
+using System.Collections.Generic;
 
 namespace Game.Tatedrez.Factory
 {
@@ -13,6 +14,16 @@ namespace Game.Tatedrez.Factory
                 PieceType.Rook => new Rook(owner),
                 PieceType.Bishop => new Bishop(owner),
                 _ => throw new ArgumentException($"Invalid piece type: {pieceType}")
+            };
+        }
+
+        public Dictionary<PieceType, int> CreateDefaultPieces()
+        {
+            return new Dictionary<PieceType, int>
+            {
+                { PieceType.Knight, 1 },
+                { PieceType.Rook, 1 },
+                { PieceType.Bishop, 1 }
             };
         }
     }
