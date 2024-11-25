@@ -121,7 +121,7 @@ namespace Game.Tatedrez.Presenter
             }
             else
             {
-                
+                //use command
                 if (gameState.MovePiece(selectedPosition.x, selectedPosition.y, x, y))
                 {
                     view.UpdateBoard(board); 
@@ -134,6 +134,7 @@ namespace Game.Tatedrez.Presenter
                     Debug.Log("Invalid move. Try again.");
                 }
             }
+            UpdateView();
         }
 
         public void UpdateView()
@@ -154,7 +155,8 @@ namespace Game.Tatedrez.Presenter
             selectedPieceType = pieceType;
             Debug.Log($"{pieceType} selected for placement.");
         }
-
+        
+        //create factory
         private Piece CreatePiece(PieceType type, PlayerColor owner)
         {
             switch (type)
