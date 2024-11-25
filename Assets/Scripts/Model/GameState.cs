@@ -16,6 +16,7 @@ namespace Game.Tatedrez.Model
         public Player CurrentPlayer { get; private set; }
         public Player OpponentPlayer { get; private set; }
         public IBoard Board { get; private set; }
+        public int TotalMoves { get; private set; }
         public bool GameOver => CurrentState == State.Completed;
 
         private const int MaxPieces = 3;
@@ -26,6 +27,7 @@ namespace Game.Tatedrez.Model
             OpponentPlayer = player2;
             Board = board;
             CurrentState = State.PlacementPhase;
+            TotalMoves = 0;
         }
 
         // Places a piece during the placement phase
@@ -36,7 +38,7 @@ namespace Game.Tatedrez.Model
             if (Board.PlacePiece(piece, x, y))
             {
                 CurrentPlayer.AddPiece(piece); // Ensure the piece is tracked by the player
-
+                IncrementMoves();
                 if (Board.CheckForTicTacToe(CurrentPlayer.Color))
                 {
                     CurrentState = State.Completed;
@@ -58,6 +60,10 @@ namespace Game.Tatedrez.Model
             return false;
         }
 
+        private void IncrementMoves()
+        {
+            TotalMoves += 1;
+        }
 
         // Moves a piece during the dynamic phase
         public bool MovePiece(int fromX, int fromY, int toX, int toY)
@@ -66,6 +72,7 @@ namespace Game.Tatedrez.Model
 
             if (Board.MovePiece(fromX, fromY, toX, toY))
             {
+                IncrementMoves();
                 if (Board.CheckForTicTacToe(CurrentPlayer.Color))
                 {
                     CurrentState = State.Completed;
@@ -103,6 +110,7 @@ namespace Game.Tatedrez.Model
 
             CurrentPlayer.IsTurn = true;
             OpponentPlayer.IsTurn = false;
+            TotalMoves = 0;
 
             Debug.Log("Game reset to initial state.");
         }
