@@ -1,7 +1,7 @@
 
 using NUnit.Framework;
 using Game.Tatedrez.Model;
-
+using Game.Tatedrez.Factory;
 public class TatedrezTests
 {
     [Test]
@@ -160,5 +160,19 @@ public class TatedrezTests
 
         // Assert
         Assert.AreEqual(4,gameState.TotalMoves);
+    }
+
+    [Test]
+    public void PieceFactoryTest_CheckColorAndPieceType()
+    {   
+        //Arrange
+        IPieceFactory pieceFactory = new PieceFactory();
+
+        //Act
+        var rook = pieceFactory.CreatePiece(PieceType.Rook,PlayerColor.Black);
+
+        // Assert
+        Assert.AreEqual(rook.GetPieceType(),PieceType.Rook);
+        Assert.AreEqual(rook.Owner, PlayerColor.Black);
     }
 }
