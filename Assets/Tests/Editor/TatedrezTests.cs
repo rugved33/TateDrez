@@ -138,4 +138,27 @@ public class TatedrezTests
         Assert.AreEqual(GameState.State.Completed, gameState.CurrentState, "Game should end in Completed state.");
         Assert.IsTrue(board.CheckForTicTacToe(PlayerColor.White), "White should win with a TicTacToe.");
     }
+
+    [Test]
+    public void GameState_CheckTotalMoves()
+    {
+        // Arrange
+        var player1 = new Player(PlayerColor.White);
+        var player2 = new Player(PlayerColor.Black);
+        var board = new Board(3, 3);
+        var gameState = new GameState(player1, player2, board);
+
+        var rook1 = new Rook(PlayerColor.White);
+        var rook2 = new Rook(PlayerColor.White);
+
+        // Act
+        gameState.PlacePiece(rook1, 0, 0);
+        gameState.PlacePiece(new Rook(PlayerColor.Black), 1, 1); // Opponent move
+        gameState.PlacePiece(rook2, 1, 0);
+        gameState.PlacePiece(new Rook(PlayerColor.Black), 2, 2); // Opponent move
+
+
+        // Assert
+        Assert.AreEqual(4,gameState.TotalMoves);
+    }
 }
