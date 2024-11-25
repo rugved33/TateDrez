@@ -1,7 +1,7 @@
 using UnityEngine;
 using Game.Tatedrez.Model;
 using Game.Tatedrez.View;
-
+using Game.Tatedrez.Factory;
 namespace Game.Tatedrez.Presenter
 {
     public class TatedrezPresenter : MonoBehaviour
@@ -16,12 +16,13 @@ namespace Game.Tatedrez.Presenter
         private Piece selectedPiece;
         private (int x, int y) selectedPosition; 
         private PieceType selectedPieceType;
-
+        private IPieceFactory pieceFactory;
         private const int BoardWidth = 3;
         private const int BoardHeight = 3;
 
         private void Start()
         {
+            pieceFactory = new PieceFactory();
             InitializeGame();
         }
 
@@ -74,7 +75,7 @@ namespace Game.Tatedrez.Presenter
 
             Debug.Log($"current player is {gameState.CurrentPlayer.Color}");
 
-            var piece = CreatePiece(selectedPieceType, gameState.CurrentPlayer.Color);
+            var piece = pieceFactory.CreatePiece(selectedPieceType, gameState.CurrentPlayer.Color);
 
             if (gameState.PlacePiece(piece, x, y))
             {
@@ -160,18 +161,6 @@ namespace Game.Tatedrez.Presenter
             Debug.Log($"{pieceType} selected for placement.");
         }
         
-        //create factory
-        private Piece CreatePiece(PieceType type, PlayerColor owner)
-        {
-            switch (type)
-            {
-                case PieceType.Knight: return new Knight(owner);
-                case PieceType.Rook: return new Rook(owner);
-                case PieceType.Bishop: return new Bishop(owner);
-                default: throw new System.Exception("Invalid piece type.");
-            }
-        }
-
         public void ResetGame()
         {
             gameState.ResetGame();
