@@ -9,6 +9,7 @@ namespace Game.Tatedrez.Presenter
     public class TatedrezPresenter : MonoBehaviour
     {
         [SerializeField] private TatedrezView view; // Reference to the View (UI/Board)
+        [SerializeField] private GameUIView gameUIView; 
         private GameState gameState;
 
         private Player player1;
@@ -46,6 +47,9 @@ namespace Game.Tatedrez.Presenter
 
             view.InitializeBoard(BoardWidth, BoardHeight);
             view.BindPieceTypeSelection(SelectPieceType); 
+
+            UpdateGameUIView();
+            gameUIView.BindRetryButton(ResetGame);
         }
 
         private void HandleInput()
@@ -95,6 +99,17 @@ namespace Game.Tatedrez.Presenter
                 view.UpdateBoard(board); 
                 selectedPieceType = PieceType.None; 
                 Debug.Log($"{piece.GetType().Name} placed at ({x}, {y})");
+
+                if (gameState.CurrentState == GameState.State.DynamicPhase)
+                {
+                    view.ShowPiecesSelectionButtons(false); 
+                    Debug.Log("Dynamic phase started. Disabling piece selection buttons.");
+                }
+
+                if (gameState.GameOver)
+                {
+                    HandleGameOver(gameState.CurrentPlayer);
+                }
             }
             else
             {
@@ -102,7 +117,7 @@ namespace Game.Tatedrez.Presenter
             }
 
             Debug.Log($"current player after placement is {gameState.CurrentPlayer.Color}");
-            UpdateView();
+            UpdateGameUIView();
         }
 
         
@@ -138,13 +153,18 @@ namespace Game.Tatedrez.Presenter
                     view.ClearHighlights();
                     selectedPiece = null; 
                     Debug.Log($"Moved piece to ({x}, {y})");
+
+                    if (gameState.GameOver)
+                    {
+                        HandleGameOver(gameState.CurrentPlayer);
+                    }
                 }
                 else
                 {
                     Debug.Log("Invalid move. Try again.");
                 }
             }
-            UpdateView();
+            UpdateGameUIView();
         }
 
         private void SelectPiece(Piece piece, int x, int y)
@@ -167,15 +187,11 @@ namespace Game.Tatedrez.Presenter
             }
         }
 
-        public void UpdateView()
+        public void UpdateGameUIView()
         {
             Debug.Log($"updating view current player after placement is {gameState.CurrentPlayer.Color}");
-
-            int totalMoves = gameState.TotalMoves;
-            view.UpdateHUD(totalMoves);
-
-            var currentPlayer = gameState.CurrentPlayer;
-            view.UpdateCurrentPlayerView(currentPlayer);
+            view.UpdateCurrentPlayerView(gameState.CurrentPlayer);
+            gameUIView.UpdateHUD(gameState.TotalMoves, gameState.CurrentPlayer);
         }
 
         public void SelectPieceType(PieceType pieceType)
@@ -204,6 +220,14 @@ namespace Game.Tatedrez.Presenter
             {
                 view.ResetView();
                 InitializeGame();
+            }
+        }
+
+        private void HandleGameOver(Player winner)
+        {
+            if (winner != null)
+            {
+                gameUIView.ShowWinScreen(winner);
             }
         }
     }
