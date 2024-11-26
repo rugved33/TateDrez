@@ -15,12 +15,18 @@ namespace Game.Tatedrez.Commands
             this.piece = piece;
             this.x = x;
             this.y = y;
-            gameState.CurrentPlayer.DeductAvailablePiece(piece.GetPieceType());
         }
 
         public bool Execute()
         {
-            return gameState.PlacePiece(piece, x, y);
+            var currentPlayer = gameState.CurrentPlayer;
+            var piecePlaceSuccessfully =  gameState.PlacePiece(piece, x, y);
+
+            if(piecePlaceSuccessfully)
+            {
+                currentPlayer.DeductAvailablePiece(piece.GetPieceType());
+            }
+            return piecePlaceSuccessfully;
         }
     }
 }
