@@ -3,6 +3,8 @@ using Game.Tatedrez.Model;
 using Game.Tatedrez.View;
 using Game.Tatedrez.Factory;
 using Game.Tatedrez.Commands;
+using DependencyInjection;
+
 
 namespace Game.Tatedrez.Presenter
 {
@@ -23,9 +25,14 @@ namespace Game.Tatedrez.Presenter
         private const int BoardWidth = 3;
         private const int BoardHeight = 3;
 
+        [Inject]
+        private void Init(IPieceFactory pieceFactory)
+        {
+            this.pieceFactory = pieceFactory;
+        }
+
         private void Start()
         {
-            pieceFactory = new PieceFactory();
             InitializeGame();
         }
 
