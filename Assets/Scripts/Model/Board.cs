@@ -1,3 +1,4 @@
+using UnityEngine;
 
 namespace Game.Tatedrez.Model
 {
@@ -25,6 +26,12 @@ namespace Game.Tatedrez.Model
         public bool PlacePiece(Piece piece, int x, int y)
         {
             if (!IsWithinBounds(x, y) || boardState[x, y] != null) return false;
+
+            if (boardState[x, y] != null)
+            {
+                Debug.LogWarning($"Cannot place piece at ({x}, {y}): Cell is already occupied by {boardState[x, y].GetPieceType()}.");
+                return false;
+            }
             boardState[x, y] = piece;
             return true;
         }
