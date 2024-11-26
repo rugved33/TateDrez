@@ -182,10 +182,12 @@ public class TatedrezTests
         //Arrange
         IPieceFactory pieceFactory = new PieceFactory();
         var player = new Player(PlayerColor.White);
+        var player2 = new Player(PlayerColor.Black);
 
         //Act
         var pieces = pieceFactory.CreateDefaultPieces();
         player.InitPlayerPieces(pieces);
+        player2.InitPlayerPieces(pieceFactory.CreateDefaultPieces());
 
         // Assert
         Assert.AreEqual(player.GetAvailablePieceCount(PieceType.Rook),1);
@@ -195,5 +197,6 @@ public class TatedrezTests
         //Act
         player.DeductAvailablePiece(PieceType.Knight);
         Assert.AreEqual(player.GetAvailablePieceCount(PieceType.Knight),0);
+        Assert.AreEqual(player2.GetAvailablePieceCount(PieceType.Knight),1);
     }
 }
