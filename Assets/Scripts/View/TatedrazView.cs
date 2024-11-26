@@ -17,9 +17,7 @@ namespace Game.Tatedrez.View
         [SerializeField] private Button knightButton;
         [SerializeField] private Button rookButton;
         [SerializeField] private Button bishopButton;
-        [SerializeField] private TextMeshProUGUI currentPlayerText;
-        [Space(15)]
-        [SerializeField] private TextMeshProUGUI totalMovesHUD;
+
         [Space(15)]
         [SerializeField] private float pieceSpawnBounceDuration = 0.5f;
         [SerializeField] private float pieceSelectedScale = 1.2f;
@@ -85,19 +83,21 @@ namespace Game.Tatedrez.View
                 }
             }
         }
-        public void UpdateHUD(int totalMoves)
-        {
-            totalMovesHUD.text = $"Total Moves: {totalMoves}";
-        }
 
         public void UpdateCurrentPlayerView(Player currentPlayer)
         {
-            currentPlayerText.text = $"Current Player: {currentPlayer.Color}";
-
             foreach (var pair in pieceButtons)
             {
                 var pieceType = pair.Key;  
-                var button = pair.Value;  
+                var button = pair.Value;
+
+                var sprite = pieceSpriteData.GetSprite(pieceType, currentPlayer.Color);
+
+                var buttonImage = button.transform.GetChild(1).GetComponent<Image>();
+                if (buttonImage != null)
+                {
+                    buttonImage.sprite = sprite;
+                }
                 bool hasPieceOfType = currentPlayer.Pieces.Exists(piece => piece.GetPieceType() == pieceType);
 
                 button.interactable = !hasPieceOfType;
@@ -133,6 +133,7 @@ namespace Game.Tatedrez.View
 
             boardCells = null;
             pieceGameObjects.Clear();
+            ShowPiecesSelectionButtons(true);
         }
 
         private GameObject CreateCell(int x, int y)
@@ -230,6 +231,13 @@ namespace Game.Tatedrez.View
                     pieceObject.transform.DOScale(pieceNormalScale, PieceAnimDuration).SetEase(Ease.InOutSine); // Scale back to normal
                 }
             }
+        }
+
+        public void ShowPiecesSelectionButtons(bool canShow)
+        {
+            knightButton.gameObject.SetActive(canShow);
+            rookButton.gameObject.SetActive(canShow);
+            bishopButton.gameObject.SetActive(canShow);
         }
     }
 }
