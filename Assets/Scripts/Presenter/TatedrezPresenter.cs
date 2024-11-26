@@ -112,9 +112,7 @@ namespace Game.Tatedrez.Presenter
 
             if(selectedPiece == clickedPiece)
             {
-                selectedPiece = null;
-                view.HighlightCell(x,y,false);
-                Debug.Log($"Deselecting piece at ({x},{y})");
+                DeselectPiece();
                 return;
             }
 
@@ -123,10 +121,7 @@ namespace Game.Tatedrez.Presenter
                 
                 if (clickedPiece != null && clickedPiece.Owner == gameState.CurrentPlayer.Color)
                 {
-                    selectedPiece = clickedPiece;
-                    selectedPosition = (x, y);
-                    view.HighlightCell(x, y, true); 
-                    Debug.Log($"Selected piece at ({x}, {y})");
+                    SelectPiece(clickedPiece,x,y);
                 }
                 else
                 {
@@ -150,6 +145,26 @@ namespace Game.Tatedrez.Presenter
                 }
             }
             UpdateView();
+        }
+
+        private void SelectPiece(Piece piece, int x, int y)
+        {
+            selectedPiece = piece;
+            selectedPosition = (x, y);
+            view.HighlightPiece(piece, true); // Highlight the selected piece
+            view.HighlightCell(x,y,true);
+            Debug.Log($"Selected piece at ({x}, {y})");
+        }
+
+        private void DeselectPiece()
+        {
+            if (selectedPiece != null)
+            {
+                view.HighlightPiece(selectedPiece, false); // Remove highlight
+                view.HighlightCell(selectedPosition.x,selectedPosition.y,false);
+                selectedPiece = null;
+                Debug.Log("Piece deselected.");
+            }
         }
 
         public void UpdateView()

@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using System.Collections.Generic;
 using Game.Tatedrez.Model;
 using TMPro;
+using DG.Tweening;
 
 namespace Game.Tatedrez.View
 {
@@ -19,10 +20,19 @@ namespace Game.Tatedrez.View
         [SerializeField] private TextMeshProUGUI currentPlayerText;
         [Space(15)]
         [SerializeField] private TextMeshProUGUI totalMovesHUD;
+        [Space(15)]
+        [SerializeField] private float pieceSpawnBounceDuration = 0.5f;
+        [SerializeField] private float pieceSelectedScale = 1.2f;
+        [SerializeField] private float pieceNormalScale = 1.0f;
+
     
         private Dictionary<PieceType, Button> pieceButtons;
         private const float PieceAnimDuration = 0.5f;
 
+        private void Start()
+        {
+            DOTween.Init();
+        }
         public void InitializeBoard(int width, int height)
         {
             boardCells = new GameObject[width, height];
@@ -168,6 +178,8 @@ namespace Game.Tatedrez.View
             pieceObject.transform.position = GetCellWorldPosition(x, y);
             pieceObject.transform.SetParent(transform);
 
+            pieceObject.transform.localScale = Vector3.zero;
+            pieceObject.transform.DOScale(Vector3.one,  pieceSpawnBounceDuration).SetEase(Ease.OutBounce);
             // Track the spawned piece
             pieceGameObjects[piece] = pieceObject;
         }
@@ -203,6 +215,21 @@ namespace Game.Tatedrez.View
             }
 
             pieceObject.transform.position = targetPosition;
+        }
+
+        public void HighlightPiece(Piece piece, bool highlight)
+        {
+            if (pieceGameObjects.TryGetValue(piece, out var pieceObject))
+            {
+                if (highlight)
+                {
+                    pieceObject.transform.DOScale(pieceSelectedScale, PieceAnimDuration).SetEase(Ease.InOutSine); // Scale up
+                }
+                else
+                {
+                    pieceObject.transform.DOScale(pieceNormalScale, PieceAnimDuration).SetEase(Ease.InOutSine); // Scale back to normal
+                }
+            }
         }
     }
 }
