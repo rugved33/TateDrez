@@ -2,6 +2,8 @@ using UnityEngine;
 using Game.Tatedrez.Model;
 using Game.Tatedrez.View;
 using Game.Tatedrez.Factory;
+using Game.Tatedrez.Commands;
+
 namespace Game.Tatedrez.Presenter
 {
     public class TatedrezPresenter : MonoBehaviour
@@ -36,9 +38,8 @@ namespace Game.Tatedrez.Presenter
             player1 = new Player(PlayerColor.White);
             player2 = new Player(PlayerColor.Black);
 
-            var availablePieces = pieceFactory.CreateDefaultPieces();
-            player1.InitPlayerPieces(availablePieces);
-            player2.InitPlayerPieces(availablePieces);
+            player1.InitPlayerPieces(pieceFactory.CreateDefaultPieces());
+            player2.InitPlayerPieces(pieceFactory.CreateDefaultPieces());
 
             board = new Board(BoardWidth, BoardHeight);
             gameState = new GameState(player1, player2, board);
@@ -87,9 +88,10 @@ namespace Game.Tatedrez.Presenter
 
             var piece = pieceFactory.CreatePiece(selectedPieceType, gameState.CurrentPlayer.Color);
 
-            if (gameState.PlacePiece(piece, x, y))
+            var command = new PlacePieceCommand(gameState, piece, x, y);
+
+            if (command.Execute())
             {
-                gameState.CurrentPlayer.DeductAvailablePiece(selectedPieceType);
                 view.UpdateBoard(board); 
                 selectedPieceType = PieceType.None; 
                 Debug.Log($"{piece.GetType().Name} placed at ({x}, {y})");
@@ -133,8 +135,9 @@ namespace Game.Tatedrez.Presenter
             }
             else
             {
-                //use command
-                if (gameState.MovePiece(selectedPosition.x, selectedPosition.y, x, y))
+                var command = new MovePieceCommand(gameState, selectedPosition.x, selectedPosition.y, x, y);
+
+                if (command.Execute())
                 {
                     view.UpdateBoard(board); 
                     view.ClearHighlights();
@@ -180,9 +183,13 @@ namespace Game.Tatedrez.Presenter
         
         public void ResetGame()
         {
-            gameState.ResetGame();
-            view.ResetView();
-            InitializeGame();
+            var command = new ResetGameCommand(gameState);
+
+            if(command.Execute())
+            {
+                view.ResetView();
+                InitializeGame();
+            }
         }
     }
 }
