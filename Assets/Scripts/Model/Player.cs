@@ -1,22 +1,9 @@
-using UnityEngine;
 using System.Linq;
 using System.Collections.Generic;
 
 
 namespace Game.Tatedrez.Model
 {
-    public interface IPlayer
-    {
-        PlayerColor Color { get; set; }
-        List<Piece> Pieces { get;  set; }
-        bool IsTurn { get; set; }
-        void InitPlayerPieces(Dictionary<PieceType, int> Pieces);
-        void AddPiece(Piece piece);
-        bool RemovePiece(Piece piece);
-        bool CanMove(IBoard board);
-        bool DeductAvailablePiece(PieceType pieceType);
-        int GetAvailablePieceCount(PieceType pieceType);
-    }
     public class Player : IPlayer
     {
         public PlayerColor Color { get; set; }
@@ -53,12 +40,8 @@ namespace Game.Tatedrez.Model
             if (Pieces.Count < MaxLimit)
             {
                 Pieces.Add(piece);
-                Debug.Log($"Added piece: {piece.GetType().Name}. Total pieces: {Pieces.Count}");
             }
-            else
-            {
-                Debug.Log($"Cannot add piece: {piece.GetType().Name}. Max limit reached.");
-            }
+
         }
         public bool RemovePiece(Piece piece)
         {

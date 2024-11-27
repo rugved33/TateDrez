@@ -1,4 +1,4 @@
-using UnityEngine;
+using System;
 
 namespace Game.Tatedrez.Model
 {
@@ -25,8 +25,8 @@ namespace Game.Tatedrez.Model
         }
         public override bool IsValidMove(int fromX, int fromY, int toX, int toY, IBoard board)
         {
-            int dx = Mathf.Abs(toX - fromX);
-            int dy = Mathf.Abs(toY - fromY);
+            int dx = Math.Abs(toX - fromX);
+            int dy = Math.Abs(toY - fromY);
 
             // Check if the move follows the L-shape
             if (!((dx == 2 && dy == 1) || (dx == 1 && dy == 2)))
@@ -78,7 +78,7 @@ namespace Game.Tatedrez.Model
 
         public override bool IsValidMove(int fromX, int fromY, int toX, int toY, IBoard board)
         {
-            if (Mathf.Abs(toX - fromX) != Mathf.Abs(toY - fromY)) return false;
+            if (Math.Abs(toX - fromX) != Math.Abs(toY - fromY)) return false;
 
             int dx = toX > fromX ? 1 : -1;
             int dy = toY > fromY ? 1 : -1;
