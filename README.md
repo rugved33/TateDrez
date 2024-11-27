@@ -1,5 +1,5 @@
 Tatedrez Game Architecture Summary
-Your approach to building Tatedrez using modern software patterns is highly efficient and scalable. Here's a concise breakdown:
+Tatedrez sounds like an exciting project Here's an elaboration on my approach and its components:
 
 1. MVP Architecture:
 Model: Handles core game logic (e.g., rules, game state, moves).
