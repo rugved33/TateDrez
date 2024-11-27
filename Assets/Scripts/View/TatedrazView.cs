@@ -2,7 +2,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
 using Game.Tatedrez.Model;
-using TMPro;
 using DG.Tweening;
 
 namespace Game.Tatedrez.View
@@ -26,6 +25,7 @@ namespace Game.Tatedrez.View
     
         private Dictionary<PieceType, Button> pieceButtons;
         private const float PieceAnimDuration = 0.5f;
+        private bool gameOver;
 
         private void Start()
         {
@@ -72,8 +72,13 @@ namespace Game.Tatedrez.View
             return null;
         }
 
-        public void UpdateBoard(IBoard board)
+        public void UpdateBoard(IBoard board, GameState.State gameState)
         {
+            if(gameState == GameState.State.Completed)
+            {
+                gameOver = true;
+            }
+
             for (int x = 0; x < board.Width; x++)
             {
                 for (int y = 0; y < board.Height; y++)
@@ -109,6 +114,11 @@ namespace Game.Tatedrez.View
         {
             var cell = boardCells[x, y];
             cell.GetComponent<Cell>().Highlight(highlight);
+        }
+        public void RemoveHighlightCell(int x, int y)
+        {
+            var cell = boardCells[x, y];
+            cell.GetComponent<Cell>().Highlight(false);
         }
 
         public void ClearHighlights()
@@ -206,7 +216,10 @@ namespace Game.Tatedrez.View
             float duration = PieceAnimDuration; 
             float elapsed = 0f;
 
+            
+
             Vector3 startPosition = pieceObject.transform.position;
+            RemoveHighlightCell((int)startPosition.x, (int)startPosition.y);
 
             while (elapsed < duration)
             {
@@ -216,6 +229,11 @@ namespace Game.Tatedrez.View
             }
 
             pieceObject.transform.position = targetPosition;
+
+            if(!gameOver)
+            {
+                ClearHighlights();
+            }
         }
 
         public void HighlightPiece(Piece piece, bool highlight)

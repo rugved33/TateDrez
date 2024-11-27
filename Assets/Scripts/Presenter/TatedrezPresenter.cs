@@ -122,7 +122,7 @@ namespace Game.Tatedrez.Presenter
 
             if (command.Execute())
             {
-                view.UpdateBoard(board); 
+                view.UpdateBoard(board, gameState.CurrentState); 
                 selectedPieceType = PieceType.None; 
                 Debug.Log($"{piece.GetType().Name} placed at ({x}, {y})");
 
@@ -175,7 +175,7 @@ namespace Game.Tatedrez.Presenter
 
                 if (command.Execute())
                 {
-                    view.UpdateBoard(board); 
+                    view.UpdateBoard(board, gameState.CurrentState); 
                     view.HighlightCell(x,y,true);
                     selectedPiece = null; 
                     Debug.Log($"Moved piece to ({x}, {y})");
