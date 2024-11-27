@@ -27,7 +27,16 @@ namespace Game.Tatedrez.Model
         {
             int dx = Mathf.Abs(toX - fromX);
             int dy = Mathf.Abs(toY - fromY);
-            return (dx == 2 && dy == 1) || (dx == 1 && dy == 2);
+
+            // Check if the move follows the L-shape
+            if (!((dx == 2 && dy == 1) || (dx == 1 && dy == 2)))
+                return false;
+
+            // Ensure destination is empty
+            if (board.GetPiece(toX, toY) != null)
+                return false;
+
+            return true;
         }
     }
 
@@ -38,7 +47,6 @@ namespace Game.Tatedrez.Model
         {
             return PieceType.Rook;
         }
-
         public override bool IsValidMove(int fromX, int fromY, int toX, int toY, IBoard board)
         {
             if (fromX != toX && fromY != toY) return false;
@@ -55,7 +63,7 @@ namespace Game.Tatedrez.Model
                 y += dy;
             }
 
-            return true;
+            return board.GetPiece(toX, toY) == null;
         }
     }
 
@@ -67,6 +75,7 @@ namespace Game.Tatedrez.Model
         {
             return PieceType.Bishop;
         }
+
         public override bool IsValidMove(int fromX, int fromY, int toX, int toY, IBoard board)
         {
             if (Mathf.Abs(toX - fromX) != Mathf.Abs(toY - fromY)) return false;
@@ -83,7 +92,7 @@ namespace Game.Tatedrez.Model
                 y += dy;
             }
 
-            return true;
+            return board.GetPiece(toX, toY) == null;
         }
     }
 }

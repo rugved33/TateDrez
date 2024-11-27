@@ -1,4 +1,5 @@
 using UnityEngine;
+using System;
 
 
 namespace Game.Tatedrez.Model
@@ -18,8 +19,13 @@ namespace Game.Tatedrez.Model
         public IBoard Board { get; private set; }
         public int TotalMoves { get; private set; }
         public bool GameOver => CurrentState == State.Completed;
+        public event Action OnPlayerSwitched;
 
         private const int MaxPieces = 3;
+
+        private Player BonusTurnPlayer;
+        private const int MaxTurns = 1;
+        private int currentTurns = 0;
 
         public GameState(Player player1, Player player2, IBoard board)
         {
@@ -65,10 +71,50 @@ namespace Game.Tatedrez.Model
             TotalMoves += 1;
         }
 
-        // Moves a piece during the dynamic phase
+        private void CheckExtraTurns()
+        {
+            if(BonusTurnPlayer != CurrentPlayer && BonusTurnPlayer != null)
+            {
+                (CurrentPlayer, OpponentPlayer) = (OpponentPlayer, CurrentPlayer);
+                currentTurns--;
+
+                if(currentTurns <= 0)
+                {
+                    BonusTurnPlayer = null;
+                }
+            }
+        }
+
+        // Moves a piece during the dynamic phase  
         public bool MovePiece(int fromX, int fromY, int toX, int toY)
         {
-            if (CurrentState != State.DynamicPhase) return false;
+            if (CurrentState != State.DynamicPhase)
+            {
+                Debug.LogWarning("Cannot move pieces outside of the Dynamic Phase.");
+                Debug.Log(Board.GetDetailedBoardState());
+                return false;
+            }
+
+            // Check if the current player is stuck
+            if (!CurrentPlayer.CanMove(Board))
+            {
+                Debug.LogWarning($"{CurrentPlayer.Color} has no valid moves. Switching turn to {OpponentPlayer.Color}.");
+                SwitchTurn();
+                BonusTurnPlayer = CurrentPlayer;
+                currentTurns = MaxTurns;
+
+
+                // Check if the opponent is also stuck
+                if (!CurrentPlayer.CanMove(Board))
+                {
+                    Debug.Log("Both players are stuck. The game ends in a draw.");
+                    CurrentState = State.Completed;
+                    return false;
+                }
+
+                return false; // Turn switches, but no move is made by the stuck player
+            }
+
 
             if (Board.MovePiece(fromX, fromY, toX, toY))
             {
@@ -84,6 +130,8 @@ namespace Game.Tatedrez.Model
                 return true;
             }
 
+            Debug.LogWarning($"Move failed unexpectedly from ({fromX}, {fromY}) to ({toX}, {toY}).");
+            Debug.Log(Board.GetDetailedBoardState());
             return false;
         }
 
@@ -91,6 +139,8 @@ namespace Game.Tatedrez.Model
         private void SwitchTurn()
         {
             (CurrentPlayer, OpponentPlayer) = (OpponentPlayer, CurrentPlayer);
+            CheckExtraTurns();
+            OnPlayerSwitched?.Invoke();
         }
 
         // Resets the game to its initial state

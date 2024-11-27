@@ -51,6 +51,7 @@ namespace Game.Tatedrez.Presenter
 
             board = new Board(BoardWidth, BoardHeight);
             gameState = new GameState(player1, player2, board);
+            gameState.OnPlayerSwitched += DeselectPiece;
 
             view.InitializeBoard(BoardWidth, BoardHeight);
             view.BindPieceTypeSelection(SelectPieceType); 
