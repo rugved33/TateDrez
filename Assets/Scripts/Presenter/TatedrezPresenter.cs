@@ -52,6 +52,7 @@ namespace Game.Tatedrez.Presenter
             board = new Board(BoardWidth, BoardHeight);
             gameState = new GameState(player1, player2, board);
             gameState.OnPlayerSwitched += DeselectPiece;
+            gameState.OnPlayerSwitched += view.ClearHighlights;
 
             view.InitializeBoard(BoardWidth, BoardHeight);
             view.BindPieceTypeSelection(SelectPieceType); 
@@ -158,7 +159,7 @@ namespace Game.Tatedrez.Presenter
                 if (command.Execute())
                 {
                     view.UpdateBoard(board); 
-                    view.ClearHighlights();
+                    view.HighlightCell(x,y,true);
                     selectedPiece = null; 
                     Debug.Log($"Moved piece to ({x}, {y})");
 
