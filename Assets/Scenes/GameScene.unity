@@ -2005,7 +2005,7 @@ MonoBehaviour:
   rookButton: {fileID: 1316184752}
   bishopButton: {fileID: 699290390}
   pieceSpawnBounceDuration: 0.5
-  pieceSelectedScale: 1.2
+  pieceSelectedScale: 1.5
   pieceNormalScale: 1
   buttonBounceDuration: 0.2
   buttonBounceScale: 1.2
