@@ -13,6 +13,16 @@ namespace Game.Tatedrez.Model
         private Dictionary<PieceType, int> availablePieces;
         private const int MaxLimit = 3;
 
+        private int[,] knightOffsets = new int[,]
+        {
+            { 2, 1 }, { 1, 2 }, { -1, 2 }, { -2, 1 },
+            { -2, -1 }, { -1, -2 }, { 1, -2 }, { 2, -1 }
+        };
+        private int[,] directions = new int[,]
+        {
+            { -1, -1 }, { -1, 1 }, { 1, -1 }, { 1, 1 }
+        };
+
         public Player(PlayerColor color)
         {
             Color = color;
@@ -82,11 +92,6 @@ namespace Game.Tatedrez.Model
         }
         private IEnumerable<(int x, int y)> GetKnightMoves(int currentX, int currentY, IBoard board)
         {
-            int[,] knightOffsets = new int[,]
-            {
-                { 2, 1 }, { 1, 2 }, { -1, 2 }, { -2, 1 },
-                { -2, -1 }, { -1, -2 }, { 1, -2 }, { 2, -1 }
-            };
 
             for (int i = 0; i < knightOffsets.GetLength(0); i++)
             {
@@ -113,11 +118,6 @@ namespace Game.Tatedrez.Model
         }
         private IEnumerable<(int x, int y)> GetBishopMoves(int currentX, int currentY, IBoard board)
         {
-            int[,] directions = new int[,]
-            {
-                { -1, -1 }, { -1, 1 }, { 1, -1 }, { 1, 1 }
-            };
-
             for (int dir = 0; dir < directions.GetLength(0); dir++)
             {
                 int dx = directions[dir, 0];
