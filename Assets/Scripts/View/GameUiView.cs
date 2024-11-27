@@ -58,5 +58,10 @@ namespace Game.Tatedrez.View
             navigationController.Pop(); 
             hudController.UpdateHUD(0, null); 
         }
+
+        public void ShowFeedback(string msg)
+        {
+            hudController.ShowFeedback(msg);
+        }
     }
 }

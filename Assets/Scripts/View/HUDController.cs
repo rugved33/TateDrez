@@ -1,6 +1,7 @@
 using UnityEngine;
 using TMPro;
 using Game.Tatedrez.Model;
+using System.Collections;
 
 namespace Game.Tatedrez.View
 {
@@ -9,6 +10,11 @@ namespace Game.Tatedrez.View
         [Header("HUD Elements")]
         [SerializeField] private TextMeshProUGUI currentPlayerText;
         [SerializeField] private TextMeshProUGUI totalMovesHUD;
+
+        [SerializeField] private TextMeshProUGUI feedbackText;
+
+        [Header("Feedback Settings")]
+        [SerializeField] private float feedbackDuration = 2f;
 
         public void UpdateHUD(int totalMoves, Player currentPlayer)
         {
@@ -27,6 +33,18 @@ namespace Game.Tatedrez.View
                     currentPlayerText.color = Color.white;
                 }
             }
+        }
+        public void ShowFeedback(string message)
+        {
+            feedbackText.text = message;
+            feedbackText.gameObject.SetActive(true);
+            StartCoroutine(HideFeedbackAfterDelay());
+        }
+
+        private IEnumerator HideFeedbackAfterDelay()
+        {
+            yield return new WaitForSeconds(feedbackDuration);
+            feedbackText.gameObject.SetActive(false);
         }
     }
 }

@@ -10,7 +10,7 @@ namespace Game.Tatedrez.Presenter
 {
     public class TatedrezPresenter : MonoBehaviour
     {
-        [SerializeField] private TatedrezView view; // Reference to the View (UI/Board)
+        [SerializeField] private TatedrezView view; 
         [SerializeField] private GameUIView gameUIView; 
         private GameState gameState;
 
@@ -140,6 +140,7 @@ namespace Game.Tatedrez.Presenter
             else
             {
                 Debug.Log("Invalid placement position.");
+                gameUIView.ShowFeedback("Invalid placement position.");
             }
 
             Debug.Log($"current player after placement is {gameState.CurrentPlayer.Color}");
@@ -167,6 +168,7 @@ namespace Game.Tatedrez.Presenter
                 else
                 {
                     Debug.Log("No piece selected or piece does not belong to the current player.");
+                    gameUIView.ShowFeedback("Select Piece");
                 }
             }
             else
@@ -188,6 +190,7 @@ namespace Game.Tatedrez.Presenter
                 else
                 {
                     Debug.Log("Invalid move. Try again.");
+                    gameUIView.ShowFeedback("Invalid move. Try again.");
                 }
             }
             UpdateGameUIView();
