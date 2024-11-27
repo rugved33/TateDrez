@@ -84,6 +84,25 @@ namespace Game.Tatedrez.Model
         {
             return p1?.Owner == playerColor && p2?.Owner == playerColor && p3?.Owner == playerColor;
         }
+        public string GetDetailedBoardState()
+        {
+            var boardString = new System.Text.StringBuilder();
+
+            for (int y = 0; y < Height; y++)
+            {
+                for (int x = 0; x < Width; x++)
+                {
+                    var piece = GetPiece(x, y);
+                    string pieceInfo = piece != null
+                        ? $"{piece.GetPieceType()} ({piece.Owner})"
+                        : "Empty";
+
+                    boardString.AppendLine($"Position ({x}, {y}): {pieceInfo}");
+                }
+            }
+
+            return boardString.ToString();
+        }
 
         public bool IsWithinBounds(int x, int y) => x >= 0 && x < Width && y >= 0 && y < Height;
     }
