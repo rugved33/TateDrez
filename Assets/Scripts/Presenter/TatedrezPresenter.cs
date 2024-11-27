@@ -235,6 +235,12 @@ namespace Game.Tatedrez.Presenter
         {
             if (winner != null)
             {
+                var winningCells = gameState.GetWinningCells();
+
+                foreach (var (x, y) in winningCells)
+                {
+                    view.HighlightCell(x, y, true); 
+                }
                 gameUIView.ShowWinScreen(winner);
             }
         }

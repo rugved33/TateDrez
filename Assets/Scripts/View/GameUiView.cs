@@ -2,6 +2,7 @@ using UnityEngine;
 using Game.Tatedrez.Model;
 using DependencyInjection;
 using UnityEngine.UI;
+using System.Collections;
 
 namespace Game.Tatedrez.View
 {
@@ -17,6 +18,7 @@ namespace Game.Tatedrez.View
         [SerializeField] private HUDController hudController;
 
         private UINavigationController navigationController;
+        private const float DELAY = 2f;
 
         [Inject]
         private void Init(UINavigationController uINavigationController)
@@ -37,6 +39,12 @@ namespace Game.Tatedrez.View
         public void ShowWinScreen(Player winner)
         {
             winnerText.text = $"{winner.Color} Wins!";
+            StartCoroutine(ShowEndScreen());
+        }
+
+        private IEnumerator ShowEndScreen()
+        {
+            yield return new WaitForSeconds(DELAY);
             navigationController.Push(winScreen);
         }
 

@@ -224,11 +224,11 @@ namespace Game.Tatedrez.View
             {
                 if (highlight)
                 {
-                    pieceObject.transform.DOScale(pieceSelectedScale, PieceAnimDuration).SetEase(Ease.InOutSine); // Scale up
+                    pieceObject.transform.DOScale(pieceSelectedScale, PieceAnimDuration).SetEase(Ease.OutBounce); // Scale up
                 }
                 else
                 {
-                    pieceObject.transform.DOScale(pieceNormalScale, PieceAnimDuration).SetEase(Ease.InOutSine); // Scale back to normal
+                    pieceObject.transform.DOScale(pieceNormalScale, PieceAnimDuration).SetEase(Ease.InOutBounce); // Scale back to normal
                 }
             }
         }

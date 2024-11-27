@@ -1,6 +1,6 @@
 using UnityEngine;
 using System;
-
+using System.Collections.Generic;
 
 namespace Game.Tatedrez.Model
 {
@@ -163,6 +163,62 @@ namespace Game.Tatedrez.Model
             TotalMoves = 0;
 
             Debug.Log("Game reset to initial state.");
+        }
+
+        public List<(int x, int y)> GetWinningCells()
+        {
+            var winningCells = new List<(int x, int y)>();
+
+            // Check rows
+            for (int y = 0; y < Board.Height; y++)
+            {
+                if (Board.GetPiece(0, y)?.Owner == CurrentPlayer.Color &&
+                    Board.GetPiece(1, y)?.Owner == CurrentPlayer.Color &&
+                    Board.GetPiece(2, y)?.Owner == CurrentPlayer.Color)
+                {
+                    winningCells.Add((0, y));
+                    winningCells.Add((1, y));
+                    winningCells.Add((2, y));
+                    return winningCells;
+                }
+            }
+
+            // Check columns
+            for (int x = 0; x < Board.Width; x++)
+            {
+                if (Board.GetPiece(x, 0)?.Owner == CurrentPlayer.Color &&
+                    Board.GetPiece(x, 1)?.Owner == CurrentPlayer.Color &&
+                    Board.GetPiece(x, 2)?.Owner == CurrentPlayer.Color)
+                {
+                    winningCells.Add((x, 0));
+                    winningCells.Add((x, 1));
+                    winningCells.Add((x, 2));
+                    return winningCells;
+                }
+            }
+
+            // Check diagonals
+            if (Board.GetPiece(0, 0)?.Owner == CurrentPlayer.Color &&
+                Board.GetPiece(1, 1)?.Owner == CurrentPlayer.Color &&
+                Board.GetPiece(2, 2)?.Owner == CurrentPlayer.Color)
+            {
+                winningCells.Add((0, 0));
+                winningCells.Add((1, 1));
+                winningCells.Add((2, 2));
+                return winningCells;
+            }
+
+            if (Board.GetPiece(0, 2)?.Owner == CurrentPlayer.Color &&
+                Board.GetPiece(1, 1)?.Owner == CurrentPlayer.Color &&
+                Board.GetPiece(2, 0)?.Owner == CurrentPlayer.Color)
+            {
+                winningCells.Add((0, 2));
+                winningCells.Add((1, 1));
+                winningCells.Add((2, 0));
+                return winningCells;
+            }
+
+            return winningCells; // Empty list if no TicTacToe
         }
     }
 }
