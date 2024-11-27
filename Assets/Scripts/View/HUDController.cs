@@ -17,6 +17,15 @@ namespace Game.Tatedrez.View
             if(currentPlayer != null)
             {
                 currentPlayerText.text = $"Current Player: {currentPlayer.Color}";
+
+                if(currentPlayer.Color == PlayerColor.Black)
+                {
+                    currentPlayerText.color = Color.black;
+                }
+                else
+                {
+                    currentPlayerText.color = Color.white;
+                }
             }
         }
     }
