@@ -106,6 +106,7 @@ namespace Game.Tatedrez.Presenter
             if (selectedPieceType == PieceType.None)
             {
                 Debug.Log("Please select a piece type before placing.");
+                gameUIView.ShowFeedback("Select Piece");
                 return;
             }
 
@@ -130,6 +131,7 @@ namespace Game.Tatedrez.Presenter
                 {
                     view.ShowPiecesSelectionButtons(false); 
                     Debug.Log("Dynamic phase started. Disabling piece selection buttons.");
+                    gameUIView.ShowFeedback("Dynamic Phase Started");
                 }
 
                 if (gameState.GameOver)
@@ -140,6 +142,7 @@ namespace Game.Tatedrez.Presenter
             else
             {
                 Debug.Log("Invalid placement position.");
+                gameUIView.ShowFeedback("Invalid Placement Position");
             }
 
             Debug.Log($"current player after placement is {gameState.CurrentPlayer.Color}");
@@ -188,6 +191,7 @@ namespace Game.Tatedrez.Presenter
                 else
                 {
                     Debug.Log("Invalid move. Try again.");
+                    gameUIView.ShowFeedback("Invalid move. Try again.");
                 }
             }
             UpdateGameUIView();
