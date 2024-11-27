@@ -5,7 +5,7 @@ using Game.Tatedrez.Factory;
 public class TatedrezTests
 {
     [Test]
-    public void Player_AddAndRemovePiece()
+    public void Player_AddPiece()//todo split the test
     {
         // Arrange
         var player = new Player(PlayerColor.White);
@@ -16,6 +16,17 @@ public class TatedrezTests
 
         // Assert
         Assert.AreEqual(1, player.Pieces.Count, "Player should have 1 piece after adding.");
+    }
+
+    [Test]
+    public void Player_RemovePiece()//todo split the test
+    {
+        // Arrange
+        var player = new Player(PlayerColor.White);
+        var knight = new Knight(PlayerColor.White);
+
+        // Act
+        player.AddPiece(knight);
 
         // Act
         bool removed = player.RemovePiece(knight);
