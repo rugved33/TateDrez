@@ -10,6 +10,7 @@ namespace Game.Tatedrez
     {
         private UINavigationController navigationController = null;
         private IPieceFactory pieceFactory = null;
+        private IPlayerFactory playerFactory = null;
 
         [Provide]
         public UINavigationController NavigationController()
@@ -31,8 +32,20 @@ namespace Game.Tatedrez
                 return pieceFactory;
             }
 
-            this.pieceFactory = new PieceFactory();
+            pieceFactory = new PieceFactory();
             return pieceFactory;
+        }
+
+        [Provide]
+        public IPlayerFactory ProvidePlayerFactory()
+        {
+            if(playerFactory != null)
+            {
+                return playerFactory;
+            }
+
+            playerFactory = new PlayerFactory();
+            return playerFactory;
         }
     }
 }

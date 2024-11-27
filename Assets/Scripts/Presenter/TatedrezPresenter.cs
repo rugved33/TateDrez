@@ -14,21 +14,23 @@ namespace Game.Tatedrez.Presenter
         [SerializeField] private GameUIView gameUIView; 
         private GameState gameState;
 
-        private Player player1;
-        private Player player2;
+        private IPlayer player1;
+        private IPlayer player2;
         private IBoard board;
 
         private Piece selectedPiece;
         private (int x, int y) selectedPosition; 
         private PieceType selectedPieceType;
         private IPieceFactory pieceFactory;
+        private IPlayerFactory playerFactory;
         private const int BoardWidth = 3;
         private const int BoardHeight = 3;
 
         [Inject]
-        private void Init(IPieceFactory pieceFactory)
+        private void Init(IPieceFactory pieceFactory, IPlayerFactory playerFactory)
         {
             this.pieceFactory = pieceFactory;
+            this.playerFactory = playerFactory;
         }
 
         private void Start()
@@ -43,8 +45,8 @@ namespace Game.Tatedrez.Presenter
 
         private void InitializeGame()
         {
-            player1 = new Player(PlayerColor.White);
-            player2 = new Player(PlayerColor.Black);
+            player1 = playerFactory.CreatePiece(PlayerColor.White);
+            player2 = playerFactory.CreatePiece(PlayerColor.Black);
 
             player1.InitPlayerPieces(pieceFactory.CreateDefaultPieces());
             player2.InitPlayerPieces(pieceFactory.CreateDefaultPieces());
@@ -253,7 +255,7 @@ namespace Game.Tatedrez.Presenter
             }
         }
 
-        private void HandleGameOver(Player winner)
+        private void HandleGameOver(IPlayer winner)
         {
             if (winner != null)
             {

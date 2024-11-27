@@ -16,7 +16,7 @@ namespace Game.Tatedrez.View
         [Header("Feedback Settings")]
         [SerializeField] private float feedbackDuration = 2f;
 
-        public void UpdateHUD(int totalMoves, Player currentPlayer)
+        public void UpdateHUD(int totalMoves, IPlayer currentPlayer)
         {
             totalMovesHUD.text = $"Total Moves: {totalMoves}";
 

@@ -14,8 +14,8 @@ namespace Game.Tatedrez.Model
         }
 
         public State CurrentState { get; private set; }
-        public Player CurrentPlayer { get; private set; }
-        public Player OpponentPlayer { get; private set; }
+        public IPlayer CurrentPlayer { get; private set; }
+        public IPlayer OpponentPlayer { get; private set; }
         public IBoard Board { get; private set; }
         public int TotalMoves { get; private set; }
         public bool GameOver => CurrentState == State.Completed;
@@ -23,11 +23,11 @@ namespace Game.Tatedrez.Model
 
         private const int MaxPieces = 3;
 
-        private Player BonusTurnPlayer;
+        private IPlayer BonusTurnPlayer;
         private const int MaxTurns = 1;
         private int currentTurns = 0;
 
-        public GameState(Player player1, Player player2, IBoard board)
+        public GameState(IPlayer player1, IPlayer player2, IBoard board)
         {
             CurrentPlayer = player1;
             OpponentPlayer = player2;

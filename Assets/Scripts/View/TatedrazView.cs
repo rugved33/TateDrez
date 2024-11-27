@@ -105,7 +105,7 @@ namespace Game.Tatedrez.View
             }
         }
 
-        public void UpdateCurrentPlayerView(Player currentPlayer)
+        public void UpdateCurrentPlayerView(IPlayer currentPlayer)
         {
             foreach (var pair in pieceButtons)
             {
