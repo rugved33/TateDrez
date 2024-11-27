@@ -63,27 +63,44 @@ namespace Game.Tatedrez.Presenter
 
         private void HandleInput()
         {
+#if UNITY_EDITOR || UNITY_STANDALONE
+
             if (Input.GetMouseButtonDown(0)) 
             {
-                var boardPosition = view.GetBoardPositionFromMouse(Input.mousePosition);
-                if (boardPosition.HasValue)
-                {
-                    int x = boardPosition.Value.x;
-                    int y = boardPosition.Value.y;
+                HandleBoardInteraction(Input.mousePosition);
+            }
+#elif UNITY_IOS || UNITY_ANDROID
 
-                    if (gameState.CurrentState == GameState.State.PlacementPhase)
-                    {
-                        HandlePlacementPhase(x, y);
-                    }
-                    else if (gameState.CurrentState == GameState.State.DynamicPhase)
-                    {
-                        HandleDynamicPhase(x, y);
-                    }
+            if (Input.touchCount > 0)
+            {
+                Touch touch = Input.GetTouch(0);
+                if (touch.phase == TouchPhase.Ended) 
+                {
+                    HandleBoardInteraction(touch.position);
+                }
+            }
+#endif
+        }
+
+        private void HandleBoardInteraction(Vector3 inputPosition)
+        {
+            var boardPosition = view.GetBoardPositionFromMouse(inputPosition);
+            if (boardPosition.HasValue)
+            {
+                int x = boardPosition.Value.x;
+                int y = boardPosition.Value.y;
+
+                if (gameState.CurrentState == GameState.State.PlacementPhase)
+                {
+                    HandlePlacementPhase(x, y);
+                }
+                else if (gameState.CurrentState == GameState.State.DynamicPhase)
+                {
+                    HandleDynamicPhase(x, y);
                 }
             }
         }
 
-        
         private void HandlePlacementPhase(int x, int y)
         {
             if (selectedPieceType == PieceType.None)
