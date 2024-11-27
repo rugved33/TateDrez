@@ -5,7 +5,7 @@ using Game.Tatedrez.Factory;
 public class TatedrezTests
 {
     [Test]
-    public void Player_AddPiece()//todo split the test
+    public void Player_AddPiece()
     {
         // Arrange
         var player = new Player(PlayerColor.White);
@@ -19,7 +19,7 @@ public class TatedrezTests
     }
 
     [Test]
-    public void Player_RemovePiece()//todo split the test
+    public void Player_RemovePiece()
     {
         // Arrange
         var player = new Player(PlayerColor.White);
