@@ -5,10 +5,22 @@ using System.Collections.Generic;
 
 namespace Game.Tatedrez.Model
 {
-    public class Player
+    public interface IPlayer
     {
-        public PlayerColor Color { get; private set; }
-        public List<Piece> Pieces { get; private set; }
+        PlayerColor Color { get; set; }
+        List<Piece> Pieces { get;  set; }
+        bool IsTurn { get; set; }
+        void InitPlayerPieces(Dictionary<PieceType, int> Pieces);
+        void AddPiece(Piece piece);
+        bool RemovePiece(Piece piece);
+        bool CanMove(IBoard board);
+        bool DeductAvailablePiece(PieceType pieceType);
+        int GetAvailablePieceCount(PieceType pieceType);
+    }
+    public class Player : IPlayer
+    {
+        public PlayerColor Color { get; set; }
+        public List<Piece> Pieces { get;  set; }
         public bool IsTurn { get; set; }
         private Dictionary<PieceType, int> availablePieces;
         private const int MaxLimit = 3;
