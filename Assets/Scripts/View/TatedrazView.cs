@@ -88,9 +88,9 @@ namespace Game.Tatedrez.View
             return null;
         }
 
-        public void UpdateBoard(IBoard board, GameState.State gameState)
+        public void UpdateBoard(IBoard board, GameState gameState)
         {
-            if(gameState == GameState.State.Completed)
+            if(gameState.GameOver)
             {
                 gameOver = true;
             }
@@ -105,7 +105,7 @@ namespace Game.Tatedrez.View
             }
         }
 
-        public void UpdateCurrentPlayerView(Player currentPlayer)
+        public void UpdateCurrentPlayerView(IPlayer currentPlayer)
         {
             foreach (var pair in pieceButtons)
             {

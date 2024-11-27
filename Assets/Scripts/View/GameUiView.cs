@@ -36,7 +36,7 @@ namespace Game.Tatedrez.View
             retryButton.onClick.AddListener(() => OnRetry());
         }
 
-        public void ShowWinScreen(Player winner)
+        public void ShowWinScreen(IPlayer winner)
         {
             winnerText.text = $"{winner.Color} Wins!";
             StartCoroutine(ShowEndScreen());
@@ -48,7 +48,7 @@ namespace Game.Tatedrez.View
             navigationController.Push(winScreen);
         }
 
-        public void UpdateHUD(int totalMoves, Player currentPlayer)
+        public void UpdateHUD(int totalMoves, IPlayer currentPlayer)
         {
             hudController.UpdateHUD(totalMoves, currentPlayer);
         }

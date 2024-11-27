@@ -1,4 +1,3 @@
-using UnityEngine;
 
 namespace Game.Tatedrez.Model
 {
@@ -29,7 +28,6 @@ namespace Game.Tatedrez.Model
 
             if (boardState[x, y] != null)
             {
-                Debug.LogWarning($"Cannot place piece at ({x}, {y}): Cell is already occupied by {boardState[x, y].GetPieceType()}.");
                 return false;
             }
             boardState[x, y] = piece;
@@ -84,6 +82,7 @@ namespace Game.Tatedrez.Model
         {
             return p1?.Owner == playerColor && p2?.Owner == playerColor && p3?.Owner == playerColor;
         }
+
         public string GetDetailedBoardState()
         {
             var boardString = new System.Text.StringBuilder();
@@ -103,7 +102,6 @@ namespace Game.Tatedrez.Model
 
             return boardString.ToString();
         }
-
         public bool IsWithinBounds(int x, int y) => x >= 0 && x < Width && y >= 0 && y < Height;
     }
 }

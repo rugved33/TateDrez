@@ -1,4 +1,3 @@
-using UnityEngine;
 using System;
 using System.Collections.Generic;
 
@@ -14,8 +13,8 @@ namespace Game.Tatedrez.Model
         }
 
         public State CurrentState { get; private set; }
-        public Player CurrentPlayer { get; private set; }
-        public Player OpponentPlayer { get; private set; }
+        public IPlayer CurrentPlayer { get; private set; }
+        public IPlayer OpponentPlayer { get; private set; }
         public IBoard Board { get; private set; }
         public int TotalMoves { get; private set; }
         public bool GameOver => CurrentState == State.Completed;
@@ -23,11 +22,11 @@ namespace Game.Tatedrez.Model
 
         private const int MaxPieces = 3;
 
-        private Player BonusTurnPlayer;
+        private IPlayer BonusTurnPlayer;
         private const int MaxTurns = 1;
         private int currentTurns = 0;
 
-        public GameState(Player player1, Player player2, IBoard board)
+        public GameState(IPlayer player1, IPlayer player2, IBoard board)
         {
             CurrentPlayer = player1;
             OpponentPlayer = player2;
@@ -48,7 +47,6 @@ namespace Game.Tatedrez.Model
                 if (Board.CheckForTicTacToe(CurrentPlayer.Color))
                 {
                     CurrentState = State.Completed;
-                    Debug.Log($"{CurrentPlayer.Color} wins during the placement phase!");
                     return true;
                 }
 
@@ -56,7 +54,6 @@ namespace Game.Tatedrez.Model
                 if (CurrentPlayer.Pieces.Count == MaxPieces && OpponentPlayer.Pieces.Count == MaxPieces)
                 {
                     CurrentState = State.DynamicPhase;
-                    Debug.Log("Switching to Dynamic Phase.");
                 }
 
                 SwitchTurn();
@@ -90,15 +87,12 @@ namespace Game.Tatedrez.Model
         {
             if (CurrentState != State.DynamicPhase)
             {
-                Debug.LogWarning("Cannot move pieces outside of the Dynamic Phase.");
-                Debug.Log(Board.GetDetailedBoardState());
                 return false;
             }
 
             // Check if the current player is stuck
             if (!CurrentPlayer.CanMove(Board))
             {
-                Debug.LogWarning($"{CurrentPlayer.Color} has no valid moves. Switching turn to {OpponentPlayer.Color}.");
                 SwitchTurn();
                 BonusTurnPlayer = CurrentPlayer;
                 currentTurns = MaxTurns;
@@ -107,7 +101,6 @@ namespace Game.Tatedrez.Model
                 // Check if the opponent is also stuck
                 if (!CurrentPlayer.CanMove(Board))
                 {
-                    Debug.Log("Both players are stuck. The game ends in a draw.");
                     CurrentState = State.Completed;
                     return false;
                 }
@@ -122,7 +115,6 @@ namespace Game.Tatedrez.Model
                 if (Board.CheckForTicTacToe(CurrentPlayer.Color))
                 {
                     CurrentState = State.Completed;
-                    Debug.Log($"{CurrentPlayer.Color} wins during the dynamic phase!");
                     return true;
                 }
 
@@ -130,8 +122,6 @@ namespace Game.Tatedrez.Model
                 return true;
             }
 
-            Debug.LogWarning($"Move failed unexpectedly from ({fromX}, {fromY}) to ({toX}, {toY}).");
-            Debug.Log(Board.GetDetailedBoardState());
             return false;
         }
 
@@ -162,7 +152,6 @@ namespace Game.Tatedrez.Model
             OpponentPlayer.IsTurn = false;
             TotalMoves = 0;
 
-            Debug.Log("Game reset to initial state.");
         }
 
         public List<((int x, int y), Piece piece)> GetWinningCells()
