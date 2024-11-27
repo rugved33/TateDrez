@@ -1,6 +1,7 @@
 using UnityEngine;
+using System.Linq;
 using System.Collections.Generic;
-using Game.Tatedrez.Factory;
+
 
 namespace Game.Tatedrez.Model
 {
@@ -51,16 +52,87 @@ namespace Game.Tatedrez.Model
         {
             foreach (var piece in Pieces)
             {
-                for (int x = 0; x < board.Width; x++)
+                var (currentX, currentY) = GetPiecePosition(piece, board);
+
+
+                foreach (var (x, y) in GetPotentialMoves(piece, currentX, currentY, board))
                 {
-                    for (int y = 0; y < board.Height; y++)
-                    {
-                        if (piece.IsValidMove(GetPiecePosition(piece, board).x, GetPiecePosition(piece, board).y, x, y, board))
-                            return true;
-                    }
+                    if (piece.IsValidMove(currentX, currentY, x, y, board))
+                        return true;
                 }
             }
-            return false;
+            return false; 
+        }
+        private IEnumerable<(int x, int y)> GetPotentialMoves(Piece piece, int currentX, int currentY, IBoard board)
+        {
+            switch (piece.GetPieceType())
+            {
+                case PieceType.Knight:
+                    return GetKnightMoves(currentX, currentY, board);
+
+                case PieceType.Rook:
+                    return GetRookMoves(currentX, currentY, board);
+
+                case PieceType.Bishop:
+                    return GetBishopMoves(currentX, currentY, board);
+
+                default:
+                    return Enumerable.Empty<(int x, int y)>();
+            }
+        }
+        private IEnumerable<(int x, int y)> GetKnightMoves(int currentX, int currentY, IBoard board)
+        {
+            int[,] knightOffsets = new int[,]
+            {
+                { 2, 1 }, { 1, 2 }, { -1, 2 }, { -2, 1 },
+                { -2, -1 }, { -1, -2 }, { 1, -2 }, { 2, -1 }
+            };
+
+            for (int i = 0; i < knightOffsets.GetLength(0); i++)
+            {
+                int targetX = currentX + knightOffsets[i, 0];
+                int targetY = currentY + knightOffsets[i, 1];
+
+                if (board.IsWithinBounds(targetX, targetY))
+                {
+                    yield return (targetX, targetY);
+                }
+            }
+        }
+        private IEnumerable<(int x, int y)> GetRookMoves(int currentX, int currentY, IBoard board)
+        {
+
+            for (int x = 0; x < board.Width; x++)
+            {
+                if (x != currentX) yield return (x, currentY);
+            }
+            for (int y = 0; y < board.Height; y++)
+            {
+                if (y != currentY) yield return (currentX, y);
+            }
+        }
+        private IEnumerable<(int x, int y)> GetBishopMoves(int currentX, int currentY, IBoard board)
+        {
+            int[,] directions = new int[,]
+            {
+                { -1, -1 }, { -1, 1 }, { 1, -1 }, { 1, 1 }
+            };
+
+            for (int dir = 0; dir < directions.GetLength(0); dir++)
+            {
+                int dx = directions[dir, 0];
+                int dy = directions[dir, 1];
+
+                int x = currentX + dx, y = currentY + dy;
+
+                while (board.IsWithinBounds(x, y))
+                {
+                    yield return (x, y);
+
+                    x += dx;
+                    y += dy;
+                }
+            }
         }
 
         // Decrements the count of an available piece type

@@ -22,6 +22,11 @@ namespace Game.Tatedrez.View
         [SerializeField] private float pieceSelectedScale = 1.2f;
         [SerializeField] private float pieceNormalScale = 1.0f;
 
+        [Space(15)]
+        [SerializeField] private float buttonBounceDuration = 0.2f;
+        [SerializeField] private float buttonBounceScale = 1.2f;
+        [SerializeField] private float buttonOriginalScale = 1.0f;
+
     
         private Dictionary<PieceType, Button> pieceButtons;
         private const float PieceAnimDuration = 0.5f;
@@ -56,9 +61,20 @@ namespace Game.Tatedrez.View
 
         public void BindPieceTypeSelection(System.Action<PieceType> onPieceTypeSelected)
         {
-            knightButton.onClick.AddListener(() => onPieceTypeSelected(PieceType.Knight));
-            rookButton.onClick.AddListener(() => onPieceTypeSelected(PieceType.Rook));
-            bishopButton.onClick.AddListener(() => onPieceTypeSelected(PieceType.Bishop));
+            knightButton.onClick.AddListener(() => HandleButtonClick(knightButton, PieceType.Knight, onPieceTypeSelected));
+            rookButton.onClick.AddListener(() => HandleButtonClick(rookButton, PieceType.Rook, onPieceTypeSelected));
+            bishopButton.onClick.AddListener(() => HandleButtonClick(bishopButton, PieceType.Bishop, onPieceTypeSelected));
+        }
+
+        private void HandleButtonClick(Button button, PieceType pieceType, System.Action<PieceType> onPieceTypeSelected)
+        {
+            button.transform.DOScale(buttonBounceScale, buttonBounceDuration)
+                .SetEase(Ease.OutBounce)
+                .OnComplete(() =>
+                {
+                    button.transform.DOScale(buttonOriginalScale, buttonBounceDuration).SetEase(Ease.InOutBounce);
+                    onPieceTypeSelected(pieceType); 
+                });
         }
 
         public Vector2Int? GetBoardPositionFromMouse(Vector3 mousePosition)

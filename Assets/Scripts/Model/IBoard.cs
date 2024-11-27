@@ -10,5 +10,6 @@ namespace Game.Tatedrez.Model
         bool MovePiece(int fromX, int fromY, int toX, int toY);
         bool CheckForTicTacToe(PlayerColor playerColor);
         string GetDetailedBoardState();
+        bool IsWithinBounds(int x, int y);
     }
 }

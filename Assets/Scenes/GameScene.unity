@@ -235,7 +235,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
   m_AnchoredPosition: {x: 0, y: 90}
-  m_SizeDelta: {x: 300, y: 150}
+  m_SizeDelta: {x: 250, y: 150}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &75100708
 MonoBehaviour:
@@ -266,7 +266,7 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 4
+  m_PixelsPerUnitMultiplier: 10
 --- !u!222 &75100709
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2005,8 +2005,11 @@ MonoBehaviour:
   rookButton: {fileID: 1316184752}
   bishopButton: {fileID: 699290390}
   pieceSpawnBounceDuration: 0.5
-  pieceSelectedScale: 1.2
+  pieceSelectedScale: 1.5
   pieceNormalScale: 1
+  buttonBounceDuration: 0.2
+  buttonBounceScale: 1.2
+  buttonOriginalScale: 1
 --- !u!4 &1446938162
 Transform:
   m_ObjectHideFlags: 0
@@ -2223,7 +2226,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 0, y: 40}
+  m_AnchoredPosition: {x: 0, y: 30}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1857259373
